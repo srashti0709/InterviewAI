@@ -1,0 +1,12 @@
+{
+  "mcpServers": {
+    "darkcodeReader": {
+      "type": "stdio",
+      "command": "node",
+      "args": [
+        "c:\\Users\\DELL\\.vscode\\extensions\\goldwinstewart.dark-code-reader-0.14.2\\dist\\mcp-server.js",
+        "d:\\interviewIQ"
+      ]
+    }
+  }
+}
