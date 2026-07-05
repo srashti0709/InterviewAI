@@ -22,7 +22,7 @@ function Step1SetUp({onStart}) {
   const [resumeText, setResumeText] = useState("");
   const [analysisDone, setAnalysisDone] = useState(false)
   const [analyzing, setAnalyzing] = useState(false);
-  const [aiGender, setAiGender] = useState("female");
+  const [aiGender, setAiGender] = useState("male");
   const handledUploadResume = async () => {
     if(!resumeFile || analyzing) return;
     setAnalyzing(true)
@@ -204,29 +204,7 @@ function Step1SetUp({onStart}) {
                 <span className='text-gray-700 font-semibold text-md'>AI Interviewer</span>
               </div>
               <div className='grid grid-cols-2 gap-3'>
-                {/* Female AI Card */}
-                <motion.div
-                  whileHover={{ scale: 1.02 }}
-                  whileTap={{ scale: 0.98 }}
-                  onClick={() => setAiGender("female")}
-                  className={`relative cursor-pointer rounded-xl border-2 p-4 transition-all duration-200 flex flex-col items-center gap-2
-                    ${aiGender === "female"
-                      ? "border-[#A855F7] bg-[#FDF4FF] shadow-md"
-                      : "border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50"
-                    }`}
-                >
-                  {aiGender === "female" && (
-                    <div className='absolute top-2 right-2 w-5 h-5 bg-[#A855F7] rounded-full flex items-center justify-center'>
-                      <svg className='w-3 h-3 text-white' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth={3}>
-                        <path strokeLinecap='round' strokeLinejoin='round' d='M5 13l4 4L19 7' />
-                      </svg>
-                    </div>
-                  )}
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${aiGender === "female" ? "bg-[#F3E8FF]" : "bg-gray-100"}`}>
-                    <RiRobot2Line className={`text-lg ${aiGender === "female" ? "text-[#A855F7]" : "text-gray-400"}`}/>
-                  </div>
-                  <span className={`font-medium text-sm ${aiGender === "female" ? "text-[#9333EA]" : "text-gray-600"}`}>Female AI</span>
-                </motion.div>
+                
 
                 {/* Male AI Card */}
                 <motion.div
@@ -250,6 +228,29 @@ function Step1SetUp({onStart}) {
                     <RiRobot2Line className={`text-lg ${aiGender === "male" ? "text-[#A855F7]" : "text-gray-400"}`}/>
                   </div>
                   <span className={`font-medium text-sm ${aiGender === "male" ? "text-[#9333EA]" : "text-gray-600"}`}>Male AI</span>
+                </motion.div>
+                {/* Female AI Card */}
+                <motion.div
+                  whileHover={{ scale: 1.02 }}
+                  whileTap={{ scale: 0.98 }}
+                  onClick={() => setAiGender("female")}
+                  className={`relative cursor-pointer rounded-xl border-2 p-4 transition-all duration-200 flex flex-col items-center gap-2
+                    ${aiGender === "female"
+                      ? "border-[#A855F7] bg-[#FDF4FF] shadow-md"
+                      : "border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50"
+                    }`}
+                >
+                  {aiGender === "female" && (
+                    <div className='absolute top-2 right-2 w-5 h-5 bg-[#A855F7] rounded-full flex items-center justify-center'>
+                      <svg className='w-3 h-3 text-white' fill='none' viewBox='0 0 24 24' stroke='currentColor' strokeWidth={3}>
+                        <path strokeLinecap='round' strokeLinejoin='round' d='M5 13l4 4L19 7' />
+                      </svg>
+                    </div>
+                  )}
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center ${aiGender === "female" ? "bg-[#F3E8FF]" : "bg-gray-100"}`}>
+                    <RiRobot2Line className={`text-lg ${aiGender === "female" ? "text-[#A855F7]" : "text-gray-400"}`}/>
+                  </div>
+                  <span className={`font-medium text-sm ${aiGender === "female" ? "text-[#9333EA]" : "text-gray-600"}`}>Female AI</span>
                 </motion.div>
               </div>
             </div>
