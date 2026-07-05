@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useNavigate } from 'react-router-dom'
 import { motion } from 'motion/react'
 import { FaBriefcase, FaChartLine, FaFileUpload, FaMicrophoneAlt, FaUserTie, FaVenus, FaMars } from "react-icons/fa";
 import { RiRobot2Line } from 'react-icons/ri';
@@ -12,6 +13,7 @@ import { setUserData } from '../redux/userSlice';
 function Step1SetUp({onStart}) {
   const {userData} = useSelector((state)=>state.user)
   const dispatch = useDispatch()
+  const navigate = useNavigate();
   const [role, setRole] = useState("");
   const [experience, setExperience] = useState("")
   const [mode, setMode] = useState("Technical")
@@ -23,6 +25,7 @@ function Step1SetUp({onStart}) {
   const [analysisDone, setAnalysisDone] = useState(false)
   const [analyzing, setAnalyzing] = useState(false);
   const [aiGender, setAiGender] = useState("male");
+  const [showCreditsPopup, setShowCreditsPopup] = useState(false);
   const handledUploadResume = async () => {
     if(!resumeFile || analyzing) return;
     setAnalyzing(true)
@@ -46,6 +49,10 @@ function Step1SetUp({onStart}) {
   }
 
   const handleStart = async () => {
+    if (!userData || userData.credits < 50) {
+    setShowCreditsPopup(true);
+    return;
+  }
     setLoading(true)
     try {
       const result = await axios.post(ServerUrl + "/api/interview/generate-questions",{role,experience, mode, resumeText, projects, skills}, {withCredentials:true})
@@ -267,6 +274,41 @@ function Step1SetUp({onStart}) {
 
         </motion.div>
       </div>
+      {/* Credits Popup */}
+      {showCreditsPopup && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <motion.div
+            initial={{ scale: 0.9, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            className="bg-white rounded-2xl p-8 w-[90%] max-w-md text-center shadow-2xl"
+          >
+            <h2 className="text-2xl font-bold text-gray-800 mb-3">
+              0 Credits Left
+            </h2>
+
+            <p className="text-gray-600 mb-6">
+              You need at least <span className="font-semibold">50 credits</span> to
+              start an interview.
+            </p>
+
+            <div className="flex gap-3">
+              <button
+                onClick={() => setShowCreditsPopup(false)}
+                className="flex-1 py-3 rounded-xl border border-gray-300 hover:bg-gray-100 transition"
+              >
+                Cancel
+              </button>
+
+              <button
+                onClick={() => navigate("/pricing")}
+                className="flex-1 py-3 rounded-xl bg-gradient-to-r from-[#A855F7] to-[#C026D3] text-white font-semibold hover:opacity-90 transition"
+              >
+                Buy Credits
+              </button>
+            </div>
+          </motion.div>
+        </div>
+      )}
 
     </motion.div>
   )
