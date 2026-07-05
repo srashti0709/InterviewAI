@@ -10,8 +10,8 @@ import { setUserData } from '../redux/userSlice';
 
 
 
-function Step1SetUp({onStart}) {
-  const {userData} = useSelector((state)=>state.user)
+function Step1SetUp({ onStart }) {
+  const { userData } = useSelector((state) => state.user)
   const dispatch = useDispatch()
   const navigate = useNavigate();
   const [role, setRole] = useState("");
@@ -27,12 +27,12 @@ function Step1SetUp({onStart}) {
   const [aiGender, setAiGender] = useState("male");
   const [showCreditsPopup, setShowCreditsPopup] = useState(false);
   const handledUploadResume = async () => {
-    if(!resumeFile || analyzing) return;
+    if (!resumeFile || analyzing) return;
     setAnalyzing(true)
     const formdata = new FormData()
     formdata.append("resume", resumeFile)
     try {
-      const result = await axios.post(ServerUrl + "/api/interview/resume", formdata, {withCredentials:true})
+      const result = await axios.post(ServerUrl + "/api/interview/resume", formdata, { withCredentials: true })
       console.log(result.data)
       setRole(result.data.role || "")
       setExperience(result.data.experience || "");
@@ -40,25 +40,25 @@ function Step1SetUp({onStart}) {
       setSkills(result.data.skills || [])
       setResumeText(result.data.resumeText || "")
       setAnalysisDone(true)
-      
+
     } catch (error) {
       console.error("ERROR:", error);
       setAnalysisDone(false)
     }
-    
+
   }
 
   const handleStart = async () => {
     if (!userData || userData.credits < 50) {
-    setShowCreditsPopup(true);
-    return;
-  }
+      setShowCreditsPopup(true);
+      return;
+    }
     setLoading(true)
     try {
-      const result = await axios.post(ServerUrl + "/api/interview/generate-questions",{role,experience, mode, resumeText, projects, skills}, {withCredentials:true})
+      const result = await axios.post(ServerUrl + "/api/interview/generate-questions", { role, experience, mode, resumeText, projects, skills }, { withCredentials: true })
       console.log(result.data)
-      if(userData){
-        dispatch(setUserData({...userData, credits:result.data.creditsLeft}))
+      if (userData) {
+        dispatch(setUserData({ ...userData, credits: result.data.creditsLeft }))
       }
       setLoading(false)
       onStart({
@@ -75,18 +75,18 @@ function Step1SetUp({onStart}) {
     }
   }
   return (
-    <motion.div 
-    initial={{opacity:0}}
-    animate={{opacity:1}}
-    transition={{duration:0.6}}
-    className='min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 px-4'>
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.6 }}
+      className='min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-100 to-gray-200 px-4'>
 
       <div className='w-full max-w-6xl bg-white rounded-3xl shadow-2xl grid md:grid-cols-2 overflow-hidden'>
-        <motion.div 
-        initial={{x:-80,opacity:0}}
-        animate={{x:0,opacity:1}}
-        transition={{duration:0.7 }}
-        className='relative bg-gradient-to-br from-[#FDF4FF] to-[#F3E8FF] p-12 flex flex-col justify-center'>
+        <motion.div
+          initial={{ x: -80, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.7 }}
+          className='relative bg-gradient-to-br from-[#FDF4FF] to-[#F3E8FF] p-12 flex flex-col justify-center'>
           <h2 className='text-4xl font-bold text-gray-800 mb-6'>
             Start Your AI Interview
           </h2>
@@ -97,24 +97,24 @@ function Step1SetUp({onStart}) {
             {
               [
                 {
-                  icon: <FaUserTie className='text-[#A855F7] text-xl'/>,
+                  icon: <FaUserTie className='text-[#A855F7] text-xl' />,
                   text: "Choose Role & Experience",
                 },
                 {
-                  icon: <FaMicrophoneAlt className='text-[#A855F7] text-xl'/>,
+                  icon: <FaMicrophoneAlt className='text-[#A855F7] text-xl' />,
                   text: "Smart Voice Interview",
                 },
                 {
-                  icon: <FaChartLine className='text-[#A855F7] text-xl'/>,
+                  icon: <FaChartLine className='text-[#A855F7] text-xl' />,
                   text: "Performance Analytics",
                 }
-              ].map((item, index)=>(
-                <motion.div key={index} 
-                initial = {{y:30, opacity:0}}
-                animate = {{y:0, opacity:1}}
-                transition={{delay:0.3 + index * 0.15}}
-                whileHover={{scale:1.03}}
-                className='flex items-center space-x-4 bg-white p-4 rounded-xl shadow-sm cursor-pointer'>
+              ].map((item, index) => (
+                <motion.div key={index}
+                  initial={{ y: 30, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.3 + index * 0.15 }}
+                  whileHover={{ scale: 1.03 }}
+                  className='flex items-center space-x-4 bg-white p-4 rounded-xl shadow-sm cursor-pointer'>
                   {item.icon}
                   <span className='text-gray-700 font-medium'>{item.text}</span>
                 </motion.div>
@@ -124,94 +124,94 @@ function Step1SetUp({onStart}) {
 
 
         </motion.div>
-        <motion.div 
-        initial={{x:80, opacity:0}}
-        animate={{x:0, opacity:1}}
-        transition={{duration:0.7}}
-        className='p-12 bg-white'>
+        <motion.div
+          initial={{ x: 80, opacity: 0 }}
+          animate={{ x: 0, opacity: 1 }}
+          transition={{ duration: 0.7 }}
+          className='p-12 bg-white'>
           <h2 className='text-3xl font-bold text-gray-800 mb-8'>
             Interview SetUp
           </h2>
           <div className='space-y-6'>
             <div className='relative '>
-              <FaUserTie className='absolute top-4 left-4 text-gray-400'/>
-              <input type="text" placeholder='Enter role' className='w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#A855F7] outline-none transition' 
-              onChange={(e)=>setRole(e.target.value)} value={role}/>
+              <FaUserTie className='absolute top-4 left-4 text-gray-400' />
+              <input type="text" placeholder='Enter role' className='w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#A855F7] outline-none transition'
+                onChange={(e) => setRole(e.target.value)} value={role} />
             </div>
             <div className='relative '>
-              <FaBriefcase className='absolute top-4 left-4 text-gray-400'/>
-              <input type="text" placeholder='Experience (e.g. 2 years)' className='w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#A855F7] outline-none transition' 
-              onChange={(e)=>setExperience(e.target.value)} value={experience}/>
+              <FaBriefcase className='absolute top-4 left-4 text-gray-400' />
+              <input type="text" placeholder='Experience (e.g. 2 years)' className='w-full pl-12 pr-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#A855F7] outline-none transition'
+                onChange={(e) => setExperience(e.target.value)} value={experience} />
             </div>
             <select value={mode}
-            onChange={(e)=>setMode(e.target.value)}
-            className='w-full py-3 px-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#A855F7] outline-none transition'>
+              onChange={(e) => setMode(e.target.value)}
+              className='w-full py-3 px-4 border border-gray-200 rounded-xl focus:ring-2 focus:ring-[#A855F7] outline-none transition'>
               <option value="Technical">Technical Interview</option>
               <option value="HR">HR Interview</option>
             </select>
 
             {!analysisDone && (
-              <motion.div 
-              
-              whileHover={{scale:1.02}}
-              onClick={()=>document.getElementById("resumeUpload").click()}
-              className='border-2 border-dashed border-gray-300 rounded-xl p-8 text-center cursor-pointer hover:border-[#A855F7] hover:bg-[#FDF4FF] transition'>
-                <FaFileUpload  className='text-4xl mx-auto text-[#A855F7] mb-3'/>
-                <input type="file" id="resumeUpload" accept=".pdf,.doc,.docx" className='hidden' onChange={(e)=>setResumeFile(e.target.files[0])} />
+              <motion.div
+
+                whileHover={{ scale: 1.02 }}
+                onClick={() => document.getElementById("resumeUpload").click()}
+                className='border-2 border-dashed border-gray-300 rounded-xl p-8 text-center cursor-pointer hover:border-[#A855F7] hover:bg-[#FDF4FF] transition'>
+                <FaFileUpload className='text-4xl mx-auto text-[#A855F7] mb-3' />
+                <input type="file" id="resumeUpload" accept=".pdf,.doc,.docx" className='hidden' onChange={(e) => setResumeFile(e.target.files[0])} />
                 <p className='text-gray-600 font-medium'>
                   {resumeFile ? resumeFile.name : "Click to upload resume (Optional)"}
                 </p>
-                {resumeFile && (<motion.button 
-                whileHover={{scale:1.02}}
-                onClick={(e)=>{e.stopPropagation();handledUploadResume()}}
-                className='mt-4 bg-gray-900 text-white px-5 py-2 rounded-lg hover:bg-gray-800 transition'>
+                {resumeFile && (<motion.button
+                  whileHover={{ scale: 1.02 }}
+                  onClick={(e) => { e.stopPropagation(); handledUploadResume() }}
+                  className='mt-4 bg-gray-900 text-white px-5 py-2 rounded-lg hover:bg-gray-800 transition'>
                   {analyzing ? "Analyzing..." : "Analyze Resume"}
                 </motion.button>)}
               </motion.div>
-            ) }
+            )}
             {analysisDone && (
-              <motion.div 
-              initial={{opacity:0,y:20}}
-              animate={{opacity:1,y:0}}
-              
-              className='bg-gray-50 border-gray-200 rounded-xl p-5 space-y-4'>
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+
+                className='bg-gray-50 border-gray-200 rounded-xl p-5 space-y-4'>
                 <h3 className='text-lg font-semibold text-gray-800'>Resume Analysis Result
                 </h3>
-                {projects.length >0 &&(
-                    <div>
+                {projects.length > 0 && (
+                  <div>
                     <p className='font-medium text-gray-700 mb-1'>
                       Projects:
                     </p>
                     <ul className='list-disc list-inside text-gray-600 space-y-1'>
-                      {projects.map((p,i)=>(
+                      {projects.map((p, i) => (
                         <li key={i}>{p}</li>
                       ))}
                     </ul>
-                    </div>
-                  )}
-                  {skills.length >0 &&(
-                    <div>
+                  </div>
+                )}
+                {skills.length > 0 && (
+                  <div>
                     <p className='font-medium text-gray-700 mb-1'>
                       Skills:
                     </p>
                     <div className='flex flex-wrap gap-2'>
-                      {skills.map((s,i)=>(
+                      {skills.map((s, i) => (
                         <span key={i} className='bg-[#F3E8FF] text-[#9333EA] px-3 py-1 rounded-full text-sm'>{s}</span>
                       ))}
                     </div>
-                    </div>
-                  )}
+                  </div>
+                )}
               </motion.div>
             )}
 
             {/* AI Interviewer Gender Selection */}
             <div>
               <div className='flex items-center gap-2 mb-3'>
-                
+
                 <span className='text-gray-700 font-semibold text-md'>AI Interviewer</span>
               </div>
               <div className='grid grid-cols-2 gap-3'>
-                
+
 
                 {/* Male AI Card */}
                 <motion.div
@@ -232,7 +232,7 @@ function Step1SetUp({onStart}) {
                     </div>
                   )}
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center ${aiGender === "male" ? "bg-[#F3E8FF]" : "bg-gray-100"}`}>
-                    <RiRobot2Line className={`text-lg ${aiGender === "male" ? "text-[#A855F7]" : "text-gray-400"}`}/>
+                    <RiRobot2Line className={`text-lg ${aiGender === "male" ? "text-[#A855F7]" : "text-gray-400"}`} />
                   </div>
                   <span className={`font-medium text-sm ${aiGender === "male" ? "text-[#9333EA]" : "text-gray-600"}`}>Male AI</span>
                 </motion.div>
@@ -255,7 +255,7 @@ function Step1SetUp({onStart}) {
                     </div>
                   )}
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center ${aiGender === "female" ? "bg-[#F3E8FF]" : "bg-gray-100"}`}>
-                    <RiRobot2Line className={`text-lg ${aiGender === "female" ? "text-[#A855F7]" : "text-gray-400"}`}/>
+                    <RiRobot2Line className={`text-lg ${aiGender === "female" ? "text-[#A855F7]" : "text-gray-400"}`} />
                   </div>
                   <span className={`font-medium text-sm ${aiGender === "female" ? "text-[#9333EA]" : "text-gray-600"}`}>Female AI</span>
                 </motion.div>
@@ -263,12 +263,19 @@ function Step1SetUp({onStart}) {
             </div>
 
             <motion.button
-            onClick={handleStart}
-            disabled={!role || !experience || loading}
-            whileHover={{ scale: 1.03}}
-            whileTap={{scale:0.95}}
-            className='w-full disabled:bg-gray-600 bg-gradient-to-r from-[#A855F7] to-[#C026D3] hover:from-[#9333EA] hover:to-[#9333EA] text-white py-3 rounded-full text-lg font-semibold transition duration-300 shadow-md'>
-              {loading ? "Starting..." :"Start Interview"}
+              onClick={handleStart}
+              disabled={!role.trim() || !experience.trim() || loading}
+              whileHover={!(!role.trim() || !experience.trim() || loading) ? { scale: 1.03 } : {}}
+              whileTap={!(!role.trim() || !experience.trim() || loading) ? { scale: 0.95 } : {}}
+              className={`
+    w-full py-3 rounded-full text-lg font-semibold transition duration-300
+    ${!role.trim() || !experience.trim() || loading
+                  ? "bg-purple-200 text-purple-500 cursor-not-allowed shadow-none"
+                  : "bg-gradient-to-r from-[#A855F7] to-[#C026D3] hover:from-[#9333EA] hover:to-[#9333EA] text-white shadow-md"
+                }
+  `}
+            >
+              {loading ? "Starting..." : "Start Interview"}
             </motion.button>
           </div>
 
